@@ -21,7 +21,6 @@ contract Payroll {
     }
     
     function updateEmployeeAddress(address newAddr) public{
-        require( msg.sender == owner );
         require( newAddr != curAddr );
         require( newAddr != 0x0 );
         uint t = now - lastPayday;
