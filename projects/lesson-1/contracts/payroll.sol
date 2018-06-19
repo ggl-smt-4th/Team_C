@@ -5,7 +5,7 @@ contract Payroll {
     uint salary = 1 ether;
     address owner = msg.sender;
     address curAddr = 0xca35b7d915458ef540ade6068dfe2f44e8fa733c;
-    uint constant payDuration = 10 seconds;
+    uint constant payDuration = 30 days;
     uint lastPayday = now;
     
     function getSalary() public returns(uint){
