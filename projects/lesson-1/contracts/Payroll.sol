@@ -1,6 +1,5 @@
 pragma solidity ^0.4.14;
 
-
 contract Payroll {
     uint salary = 1 ether;
     address owner=msg.sender ;
@@ -24,12 +23,10 @@ contract Payroll {
         require(msg.sender == owner);
         require( newAddr != curAddr );
         require( newAddr != 0x0 );
-        require( curAddr != 0x0 );
         uint t = now - lastPayday;
         uint money = t / payDuration *salary;
-        if ( !hasEnoughBalance2(money) ) revert();
+        if ( !hasEnoughBalance2(money) && curAddr !=0x0 ) curAddr.transfer(money);
         lastPayday=now;
-        curAddr.transfer(money);
         curAddr = newAddr;
     }
     
@@ -51,11 +48,11 @@ contract Payroll {
     
     function getPaid() payable public {
         require( msg.sender == curAddr );
+        require( curAddr != 0x0);
         require( hasEnoughFund() ) ;
         uint newDay = lastPayday + payDuration;
         assert(newDay<now);
         lastPayday = newDay;
         curAddr.transfer(salary);
     }
-    
 }
