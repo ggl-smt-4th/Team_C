@@ -3,10 +3,10 @@ pragma solidity ^0.4.14;
 contract Payroll {
     uint constant payDuration = 30 days;
 
-    address owner;
+    address owner = 0x583031d1113ad414f02576bd6afabfb302140225;
     uint salary = 1 ether;
-    address employee;
-    uint lastPayday;
+    address employee = 0xca35b7d915458ef540ade6068dfe2f44e8fa733c;
+    uint lastPayday = now;
 
     function updateEmployeeAddress(address newAddress) public {
         if(msg.sender != owner) {
