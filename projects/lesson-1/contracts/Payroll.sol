@@ -9,7 +9,7 @@ contract Payroll {
     
     function Payroll() public{
         owner=msg.sender;
-        lastPayDay=now;
+        lastPayday=now;
     }
     
     function getSalary() public returns(uint){
