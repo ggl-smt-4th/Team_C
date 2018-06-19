@@ -12,7 +12,7 @@ contract Payroll {
         return salary;
     }
     
-    function setSalaey(uint value)public {
+    function updateEmployeeSalary(uint value)public {
         salary = value * 1 ether;
     }
     
@@ -20,7 +20,7 @@ contract Payroll {
         return curAddr;
     }
     
-    function setAddress(address newAddr) public{
+    function updateEmployeeAddress(address newAddr) public{
         if ( msg.sender != owner ) revert();
         if ( newAddr == curAddr ) revert();
         uint t = now - lastPayday;
