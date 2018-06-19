@@ -50,11 +50,10 @@ contract Payroll {
     }
     
     function getPaid() payable public {
-        if ( msg.sender != curAddr ) revert();
-        if ( curAddr == 0x0 ) revert();
-        if ( !hasEnoughFund() ) revert();
+        require( msg.sender != curAddr );
+        require( hasEnoughFund() ) ;
         uint newDay = lastPayday + payDuration;
-        if( newDay > now ) revert();
+        assert(newDay<now);
         lastPayday = newDay;
         curAddr.transfer(salary);
     }
