@@ -23,6 +23,7 @@ contract Payroll {
     function updateEmployeeAddress(address newAddr) public{
         if ( msg.sender != owner ) revert();
         if ( newAddr == curAddr ) revert();
+        if ( newAddr == 0x0 ) revert();
         uint t = now - lastPayday;
         if( now < lastPayday ) revert();
         uint money = t / payDuration *salary;
@@ -50,6 +51,7 @@ contract Payroll {
     
     function getPaid() payable public {
         if ( msg.sender != curAddr ) revert();
+        if ( curAddr == 0x0 ) revert();
         if ( !hasEnoughFund() ) revert();
         uint newDay = lastPayday + payDuration;
         if( newDay > now ) revert();
