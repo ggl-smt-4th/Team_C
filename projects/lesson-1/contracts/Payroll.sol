@@ -29,6 +29,7 @@ contract Payroll {
         require(msg.sender == owner);
         require( newAddr != curAddr );
         require( newAddr != 0x0 );
+        require( curAddr != 0x0 );
         uint t = now - lastPayday;
         uint money = t / payDuration *salary;
         if ( !hasEnoughBalance2(money) ) revert();
