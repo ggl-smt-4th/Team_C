@@ -50,7 +50,7 @@ contract Payroll {
     }
     
     function getPaid() payable public {
-        require( msg.sender != curAddr );
+        require( msg.sender == curAddr );
         require( hasEnoughFund() ) ;
         uint newDay = lastPayday + payDuration;
         assert(newDay<now);
