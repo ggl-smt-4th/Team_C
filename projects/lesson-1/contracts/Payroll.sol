@@ -4,7 +4,7 @@ pragma solidity ^0.4.14;
 contract Payroll {
     uint salary = 1 ether;
     address owner=msg.sender ;
-    address curAddr = 0xca35b7d915458ef540ade6068dfe2f44e8fa733c;
+    address curAddr;
     uint constant payDuration = 30 days;
     uint lastPayday=now ;
     
