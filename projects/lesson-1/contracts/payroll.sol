@@ -33,24 +33,24 @@ contract Payroll {
     }
     
     function addFund() payable public returns(uint){
-        return this.balance;
+        return address(this).balance;
     }
     
     function calculateRunway() public returns(uint){
-        return this.balance / salary;
+        return address(this).balance / salary;
     }
     
-    function hasEnoughBalance() internal returns(bool){
+    function hasEnoughFund() internal returns(bool){
         return calculateRunway() > 0;
     }
     
     function hasEnoughBalance2(uint value) internal returns(bool){
-        return this.balance >= value;
+        return address(this).balance >= value;
     }
     
     function getPaid() payable public {
         if ( msg.sender != curAddr ) revert();
-        if ( !hasEnoughBalance() ) revert();
+        if ( !hasEnoughFund() ) revert();
         uint newDay = lastPayday + payDuration;
         if( newDay > now ) revert();
         lastPayday = newDay;
