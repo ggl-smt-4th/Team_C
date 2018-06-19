@@ -2,10 +2,15 @@ pragma solidity ^0.4.14;
 
 contract Payroll {
     uint salary = 1 ether;
-    address owner=msg.sender ;
+    address owner;
     address curAddr;
     uint constant payDuration = 30 days;
-    uint lastPayday=now ;
+    uint lastPayday;
+    
+    function Payroll() public{
+        owner=msg.sender;
+        lastPayDay=now;
+    }
     
     function getSalary() public returns(uint){
         return salary;
