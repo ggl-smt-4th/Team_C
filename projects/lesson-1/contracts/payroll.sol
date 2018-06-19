@@ -32,7 +32,7 @@ contract Payroll {
         curAddr = newAddr;
     }
     
-    function getBalance() payable public returns(uint){
+    function addFund() payable public returns(uint){
         return this.balance;
     }
     
