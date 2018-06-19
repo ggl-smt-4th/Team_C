@@ -36,7 +36,7 @@ contract Payroll {
         return this.balance;
     }
     
-    function calculateRunway() internal returns(uint){
+    function calculateRunway() public returns(uint){
         return this.balance / salary;
     }
     
