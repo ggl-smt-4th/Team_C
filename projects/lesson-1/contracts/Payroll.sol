@@ -17,6 +17,7 @@ contract Payroll {
     }
     
     function updateEmployeeSalary(uint value)public {
+        require(value>0);
         salary = value * 1 ether;
     }
     
