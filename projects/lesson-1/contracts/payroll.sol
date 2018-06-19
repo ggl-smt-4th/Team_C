@@ -36,11 +36,11 @@ contract Payroll {
         return address(this).balance;
     }
     
-    function calculateRunway() public returns(uint){
+    function calculateRunway() view public returns(uint){
         return address(this).balance / salary;
     }
     
-    function hasEnoughFund() internal returns(bool){
+    function hasEnoughFund() public returns(bool){
         return calculateRunway() > 0;
     }
     
