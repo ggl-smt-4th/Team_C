@@ -8,13 +8,15 @@ contract Payroll {
     uint salary = 1 ether;
     address employee;
     uint lastPayday;
-
+    
+    // 部署合约时自动执行
     function Payroll() payable public {
         owner = msg.sender;
         lastPayday = now;
     }
 
     function doUpdateEmployee(address newAddress, uint newSalary) internal {
+
         if (employee != 0x0) {
             uint payment = salary * (now - lastPayday) / payDuration;
             employee.transfer(payment);
@@ -24,16 +26,21 @@ contract Payroll {
         salary = newSalary;
         lastPayday = now;
     }
-
+    
+    // 修改员工
     function updateEmployeeAddress(address newAddress) public {
-        require(msg.sender == owner);
-        require(newAddress != employee);
+        // 确定只有合约部署者能修改员工地址
+        require(msg.sender == owner);      
+        require(newAddress != employee);  
 
         doUpdateEmployee(newAddress, salary);
     }
 
+    // 修改员工工资
     function updateEmployeeSalary(uint newSalary) public {
-        require(msg.sender == owner);
+        // 确定只有合约部署者能修改员工工资
+        require(msg.sender == owner);   
+
         require(newSalary > 0);
         newSalary = newSalary * 1 ether;
         require(newSalary != salary);
@@ -45,12 +52,13 @@ contract Payroll {
         return employee;
     }
 
+    // 充值
     function addFund() payable public returns (uint) {
-        return address(this).balance;
+        return this.balance;
     }
 
     function calculateRunway() view public returns (uint) {
-        return address(this).balance / salary;
+        return this.balance / salary;
     }
 
     function getSalary() view public returns (uint) {
@@ -61,12 +69,9 @@ contract Payroll {
         return calculateRunway() > 0;
     }
 
-    function isMe() view public returns (bool) {
-        return msg.sender == employee;
-    }
-
+    // 员工获取工资
     function getPaid() public {
-        require(msg.sender == employee);
+        require(msg.sender == employee); // 只有员工能获取工资
 
         uint nextPayday = lastPayday + payDuration;
         assert(nextPayday < now);
