@@ -26,16 +26,19 @@ contract Payroll {
         lastPayday = now;
     }
     
-
+    //修改员工
     function updateEmployeeAddress(address newAddress) public {
-        require(msg.sender == owner);      //确定只有合约部署者能修改员工地址
+        //确定只有合约部署者能修改员工地址
+        require(msg.sender == owner);      
         require(newAddress != employee);  
 
         doUpdateEmployee(newAddress, salary);
     }
 
+    //修改员工工资
     function updateEmployeeSalary(uint newSalary) public {
-        require(msg.sender == owner);   //确定只有合约部署者能修改员工工资
+        //确定只有合约部署者能修改员工工资
+        require(msg.sender == owner);   
         require(newSalary > 0);
         newSalary = newSalary * 1 ether;
         require(newSalary != salary);
