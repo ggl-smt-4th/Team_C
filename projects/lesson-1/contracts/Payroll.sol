@@ -9,14 +9,15 @@ contract Payroll {
     address employee;
     uint lastPayday;
     
-    //部署合约时自动执行
+    // 部署合约时自动执行
     function Payroll() payable public {
-        owner = msg.sender;   
+        owner = msg.sender;
         lastPayday = now;
     }
 
     function doUpdateEmployee(address newAddress, uint newSalary) internal {
-        if (employee != 0x0) { 
+
+        if (employee != 0x0) {
             uint payment = salary * (now - lastPayday) / payDuration;
             employee.transfer(payment);
         }
@@ -26,19 +27,20 @@ contract Payroll {
         lastPayday = now;
     }
     
-    //修改员工
+    // 修改员工
     function updateEmployeeAddress(address newAddress) public {
-        //确定只有合约部署者能修改员工地址
+        // 确定只有合约部署者能修改员工地址
         require(msg.sender == owner);      
         require(newAddress != employee);  
 
         doUpdateEmployee(newAddress, salary);
     }
 
-    //修改员工工资
+    // 修改员工工资
     function updateEmployeeSalary(uint newSalary) public {
-        //确定只有合约部署者能修改员工工资
+        // 确定只有合约部署者能修改员工工资
         require(msg.sender == owner);   
+
         require(newSalary > 0);
         newSalary = newSalary * 1 ether;
         require(newSalary != salary);
@@ -50,7 +52,7 @@ contract Payroll {
         return employee;
     }
 
-    //充值
+    // 充值
     function addFund() payable public returns (uint) {
         return this.balance;
     }
@@ -67,9 +69,9 @@ contract Payroll {
         return calculateRunway() > 0;
     }
 
-    //员工获取工资
+    // 员工获取工资
     function getPaid() public {
-        require(msg.sender == employee); //只有员工能获取工资
+        require(msg.sender == employee); // 只有员工能获取工资
 
         uint nextPayday = lastPayday + payDuration;
         assert(nextPayday < now);
