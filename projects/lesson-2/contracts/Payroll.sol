@@ -91,7 +91,7 @@ contract Payroll {
     
     function getPaid() payable public {
         var (employee,index)=_findEmployee(msg.sender);
-        assert( employee.id!= 0x0);
+        assert( employees[index].id!= 0x0);
         require( hasEnoughFund() ) ;
         uint newDay = employees[index].lastPayday + payDuration;
         assert(newDay<now);
