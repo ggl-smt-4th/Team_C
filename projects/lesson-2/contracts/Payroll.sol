@@ -80,16 +80,16 @@ contract Payroll {
         return address(this).balance;
     }
     
-    function calculateRunway() public returns(uint){
+    function calculateRunway() public view returns(uint){
         require(totalSalary>0);
         return address(this).balance / totalSalary;
     }
     
-    function hasEnoughFund() public returns(bool){
+    function hasEnoughFund() private returns(bool){
         return calculateRunway() > 0;
     }
     
-    function hasEnoughBalance2(uint value) internal returns(bool){
+    function hasEnoughBalance2(uint value) private returns(bool){
         return address(this).balance >= value;
     }
     
