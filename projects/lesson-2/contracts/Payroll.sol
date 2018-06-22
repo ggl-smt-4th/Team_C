@@ -20,7 +20,7 @@ contract Payroll {
     function _partialPaid(Employee employee) private{
         if(employee.id!=0x0){
             uint payment=employee.salary*(now-employee.lastPayday)/payDuration;
-            if(hasEnoughBalance2(payment)) employee.id.transfer(payment);
+            if(hasEnoughFund2(payment)) employee.id.transfer(payment);
         }
     }
     
@@ -89,7 +89,7 @@ contract Payroll {
         return calculateRunway() > 0;
     }
     
-    function hasEnoughBalance2(uint value) private returns(bool){
+    function hasEnoughFund2(uint value) private returns(bool){
         return address(this).balance >= value;
     }
     
