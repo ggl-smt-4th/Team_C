@@ -7,6 +7,7 @@ contract Payroll {
         uint lastPayday;
     }
     address owner;
+    uint salaryIdent=1 ether;
     uint constant payDuration = 30 days;
     Employee[] employees;
     uint totalSalary;
@@ -34,6 +35,7 @@ contract Payroll {
         require(msg.sender==owner);
         var (employee,index)=_findEmployee(employeeId);
         assert(employee.id==0x0);
+        salary*=salaryIdent;
         employees.push(Employee(employeeId,salary,now));
         totalSalary+=salary;
     }
@@ -56,7 +58,7 @@ contract Payroll {
         _partialPaid(employees[index]);
         totalSalary+=salary-employees[index].salary;
         employees[index].id=employeeId;
-        employees[index].salary=salary;
+        employees[index].salary=salary*salaryIdent;
         employees[index].lastPayday=now;
     }
     
