@@ -24,3 +24,5 @@
 大家 fork 本项目到自己的项目下，在自己的项目中，可选任意分支开发（建议 master），开发完成后，PR 到本项目对应的分支中。
 
 > 如何提交作业: https://www.youtube.com/watch?v=X5tLHiYkHIU&t=40s
+
+> 如何更新代码: https://www.youtube.com/watch?v=G_DpaJaFvUc
