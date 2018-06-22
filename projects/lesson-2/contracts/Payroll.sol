@@ -9,7 +9,8 @@ contract Payroll {
     }
 
     uint constant payDuration = 30 days;
-
+    
+    uint totalSalary = 0;
     address owner;
     Employee[] employees;
 
@@ -24,7 +25,7 @@ contract Payroll {
     }
     
     //查找员工及所在位置
-    function _getEmployee(address newAddr) private returns (Employee storage, uint) {
+    function _getEmployee(address newAddr) private returns (Employee, uint) {
         for (uint i=0; i<employees.length; i++){
             if (employees[i].addr == newAddr){
                 return (employees[i], i);
@@ -43,7 +44,7 @@ contract Payroll {
                 revert() ;
             }
         }
-
+        totalSalary += (salary * 1 ether);
         employees.push(Employee(employeeAddress, salary * 1 ether, now));
     }
 
@@ -58,6 +59,7 @@ contract Payroll {
         _particlePaid(employee);
                 
         //删除员工
+        totalSalary -= employees[index].salary;
         delete employees[index];
         //将地址为空的员工置于数组最后
         employees[index] = employees[employees.length - 1];
@@ -71,9 +73,12 @@ contract Payroll {
         assert(employee.addr != 0x0);
         
        _particlePaid(employee);
+       
+       totalSalary -= employees[index].salary;
+       totalSalary +=salary;
                 
-        employee.salary = salary;
-        employee.lastPayday = now;
+        employees[index].salary = salary;
+        employees[index].lastPayday = now;
     }
 
     function addFund() payable public returns (uint) {
@@ -81,10 +86,6 @@ contract Payroll {
     }
 
     function calculateRunway() public view returns (uint) {
-        uint totalSalary = 0;
-        for (uint i=0; i<employees.length; i++){
-            totalSalary += employees[i].salary;
-        }
         return address(this).balance / totalSalary;
     }
 
@@ -99,7 +100,7 @@ contract Payroll {
         uint nextPayday =employee.lastPayday + payDuration;
         assert(nextPayday < now);
         
-        employee.lastPayday = nextPayday;
+        employees[index].lastPayday = nextPayday;
         employee.addr.transfer(employee.salary);
     }
 }
