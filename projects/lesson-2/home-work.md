@@ -10,7 +10,7 @@
 9. 29222 + 7950
 10. 30003 + 8731
 
-每增加一个employee, calculateRunway()的gas消耗都会增加. 原因是calculateRunway()函数中要遍历employees数组. 当addEmployee()后, employees数组长度增加, 遍历一次的计算次数也增加, 因此gas消耗增加. 为了减少calculateRunway()的gas消耗, 可以在contract中存储totalSalary, 每次add, remove或update employee时更新totalSalary. calculateRunway可以直接用totalSalary计算出结果, 不用遍历数组. 这样calculateRunway()的计算复杂度是固定的, gas消耗不变. 实验结果如下:    
+每增加一个employee, calculateRunway()的gas消耗都会增加. 原因是calculateRunway()函数中要遍历employees数组. 当addEmployee()后, employees数组长度增加, 遍历一次的计算次数也增加, 因此gas消耗增加. 为了减少calculateRunway()的gas消耗, 可以在contract中存储totalSalary, 每次add, remove或update employee时更新totalSalary. calculateRunway可以直接用totalSalary计算出结果, 不用遍历数组. 这样calculateRunway()的计算复杂度是固定的, gas消耗不变. 实验结果如下:    
 优化后每次calculateRunway()的gas消耗:   
 
 1. 22132 + 860
@@ -24,7 +24,7 @@
 9. 22132 + 860
 10. 22132 + 860  
 
-这带来一个问题, add, remove和update employee增加了额外的计算, 它们的gas消耗应当会增加, 实验结果如下:
+这带来一个问题, add, remove和update employee增加了额外的计算, 它们的gas消耗应当会增加, 实验结果如下:
 
 
 
@@ -45,4 +45,4 @@
 3. 96762 73890
 4. 97603 74731  
 
-结果验证了假设. 总的来说, 是否应该采取上面的优化取决于calculateRunway()以及add, remove, update employee函数调用次数的多少, 如果calculateRunway()将会被频繁调用, 需要采取优化. 如果相对来说add, remove, update employee会被频繁调用, 则不应当采取上面的优化. 
+结果验证了假设. 总的来说, 是否应该采取上面的优化取决于calculateRunway()以及add, remove, update employee函数调用次数的多少, 如果calculateRunway()将会被频繁调用, 需要采取优化. 如果相对来说add, remove, update employee会被频繁调用, 则不应当采取上面的优化. 
