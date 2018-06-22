@@ -3,7 +3,9 @@ pragma solidity ^0.4.14;
 contract Payroll {
 
     struct Employee {
-        // TODO: your code here
+        address addr;
+        uint salary ;
+        uint lastPayday;
     }
 
     uint constant payDuration = 30 days;
@@ -11,23 +13,61 @@ contract Payroll {
     address owner;
     Employee[] employees;
 
+    //构造函数
     function Payroll() payable public {
         owner = msg.sender;
+    }
+    
+    function _particlePaid(Employee employee) private{
+        uint payment =employee.salary * (now -employee.lastPayday) / payDuration;
+        employee.addr.transfer(payment);
+    }
+    
+    //查找员工及所在位置
+    function _getEmployee(address newAddr) private returns (Employee storage, uint) {
+        for (uint i=0; i<employees.length; i++){
+            if (employees[i].addr == newAddr){
+                return (employees[i], i);
+            }
+        }
     }
 
     function addEmployee(address employeeAddress, uint salary) public {
         require(msg.sender == owner);
-        // TODO: your code here
+        //找到该员工及所在位置（var 指代任意变量）
+        var (employee, index)  =_getEmployee(employeeAddress); 
+        assert(employee.addr == 0x0);
+
+        employees.push(Employee(employeeAddress, salary * 1 ether, now));
     }
 
     function removeEmployee(address employeeId) public {
         require(msg.sender == owner);
-        // TODO: your code here
+        
+        var (employee, index)  =_getEmployee(employeeId); 
+        //确认员工是存在数组中的
+        assert(employee.addr != 0x0);
+        
+        //先结清员工的工资
+        _particlePaid(employee);
+                
+        //删除员工
+        delete employees[index];
+        //将地址为空的员工置于数组最后
+        employees[index] = employees[employees.length - 1];
+        employees.length -= 1;
     }
 
     function updateEmployee(address employeeAddress, uint salary) public {
         require(msg.sender == owner);
-        // TODO: your code here
+         var (employee, index)  =_getEmployee(employeeAddress); 
+        //确认员工是存在数组中的
+        assert(employee.addr != 0x0);
+        
+       _particlePaid(employee);
+                
+        employee.salary = salary;
+        employee.lastPayday = now;
     }
 
     function addFund() payable public returns (uint) {
@@ -35,7 +75,11 @@ contract Payroll {
     }
 
     function calculateRunway() public view returns (uint) {
-        // TODO: your code here
+        uint totalSalary = 0 ether;
+        for (uint i=0; i<employees.length; i++){
+            totalSalary += employees[i].salary * 1 ether;
+        }
+        return address(this).balance / totalSalary;
     }
 
     function hasEnoughFund() public view returns (bool) {
@@ -43,7 +87,14 @@ contract Payroll {
     }
 
     function getPaid() public {
-        // TODO: your code here
+        var (employee, index)  =_getEmployee(msg.sender); 
+        assert(employee.addr != 0x0);
+        
+        uint nextPayday =employee.lastPayday + payDuration;
+        assert(nextPayday < now);
+        
+        employee.lastPayday = nextPayday;
+        employee.addr.transfer(employee.salary);
     }
 }
 
