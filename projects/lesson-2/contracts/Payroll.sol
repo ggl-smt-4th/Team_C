@@ -7,10 +7,10 @@ contract Payroll {
         uint lastPayday;
     }
     address owner;
-    uint salaryIdent=1 ether;
     uint constant payDuration = 30 days;
     Employee[] employees;
     uint totalSalary;
+    uint salaryIdent=1 ether;
     
     function Payroll(){
         owner=msg.sender;
@@ -56,9 +56,10 @@ contract Payroll {
         var (employee,index)=_findEmployee(employeeId);
         assert(employee.id==0x0);
         _partialPaid(employees[index]);
+        salary*=salaryIdent;
         totalSalary+=salary-employees[index].salary;
         employees[index].id=employeeId;
-        employees[index].salary=salary*salaryIdent;
+        employees[index].salary=salary;
         employees[index].lastPayday=now;
     }
     
@@ -93,11 +94,12 @@ contract Payroll {
     
     function getPaid() payable public {
         var (employee,index)=_findEmployee(msg.sender);
-        assert( employee.id!= 0x0);
+        if ( employee.id==0x0) revert();
+        require( hasEnoughFund() );
         uint newDay = employee.lastPayday + payDuration;
         assert(newDay<now);
         employees[index].lastPayday = newDay;
-        employees[index].id.transfer(employee.salary);
+        employees[index].id.transfer(employees[index].salary);
     }
     
 }
