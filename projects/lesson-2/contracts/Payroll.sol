@@ -91,12 +91,11 @@ contract Payroll {
     
     function getPaid() payable public {
         var (employee,index)=_findEmployee(msg.sender);
-        assert( employees[index].id!= 0x0);
-        require( hasEnoughFund() ) ;
-        uint newDay = employees[index].lastPayday + payDuration;
+        assert( employee.id!= 0x0);
+        uint newDay = employee.lastPayday + payDuration;
         assert(newDay<now);
         employees[index].lastPayday = newDay;
-        employees[index].id.transfer(employees[index].salary);
+        employees[index].id.transfer(employee.salary);
     }
     
 }
