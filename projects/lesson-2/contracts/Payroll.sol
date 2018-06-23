@@ -35,7 +35,7 @@ contract Payroll {
         require(msg.sender == owner);
         var (employee, index) = _findEmployee(employeeAddress);
         assert(employee.id == 0x0);
-        salary *= 1 ether;
+        salary *= 1 ether;  // convert the uint to ether
         employees.push(Employee(employeeAddress, salary, now));
         totalSalary += salary;
     }
@@ -45,10 +45,10 @@ contract Payroll {
         var (employee, index) = _findEmployee(employeeId);
         assert(employee.id != 0x0);
         _partialPaid(employee);
+        totalSalary -= employee.salary;
         delete employees[index];
         employees[index] = employees[employees.length - 1];
         employees.length -= 1;
-        totalSalary -= employees[index].salary;
     }
 
     function updateEmployee(address employeeAddress, uint salary) public {
