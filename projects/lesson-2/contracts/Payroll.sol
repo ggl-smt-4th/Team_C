@@ -68,10 +68,6 @@ contract Payroll {
     }
 
     function calculateRunway() public view returns (uint) {
-        uint totalSalary = 0;
-        for (uint i = 0; i < employees.length; i++){
-            totalSalary += employees[i].salary;
-        }
         return this.balance / totalSalary;
     }
 
