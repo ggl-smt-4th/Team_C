@@ -100,8 +100,8 @@ contract Payroll {
         uint nextPayday = employee.lastPayday + payDuration;
         assert(nextPayday <= now);
         
-        employee.lastPayday = nextPayday;
-        employee.id.transfer(employee.salary);
+        employees[index].lastPayday = nextPayday;
+        employees[index].id.transfer(employee.salary);
         
     }
 }
