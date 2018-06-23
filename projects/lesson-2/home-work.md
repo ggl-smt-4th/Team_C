@@ -1,6 +1,7 @@
 ii.添加十个员工，每次加入一个员工后调用 calculateRunway() 函数，消耗的gas没有变化。
 
-![屏幕快照](/Users/eagle/Desktop/屏幕快照.png)
+![](https://ws1.sinaimg.cn/large/006tNc79gy1fslgkx8bkxj313g046aaz.jpg)
+
 
 
 
