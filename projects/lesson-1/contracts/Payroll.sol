@@ -1,77 +1,64 @@
 pragma solidity ^0.4.14;
 
 contract Payroll {
-
-    uint constant payDuration = 30 days;
-
-    address owner;
     uint salary = 1 ether;
-    address employee;
+    address owner;
+    address curAddr;
+    uint constant payDuration = 30 days;
     uint lastPayday;
-
-    function Payroll() payable public {
-        owner = msg.sender;
-        lastPayday = now;
+    
+    function Payroll() public{
+        owner=msg.sender;
+        lastPayday=now;
     }
-
-    function doUpdateEmployee(address newAddress, uint newSalary) internal {
-        if (employee != 0x0) {
-            uint payment = salary * (now - lastPayday) / payDuration;
-            employee.transfer(payment);
-        }
-
-        employee = newAddress;
-        salary = newSalary;
-        lastPayday = now;
-    }
-
-    function updateEmployeeAddress(address newAddress) public {
-        require(msg.sender == owner);
-        require(newAddress != employee);
-
-        doUpdateEmployee(newAddress, salary);
-    }
-
-    function updateEmployeeSalary(uint newSalary) public {
-        require(msg.sender == owner);
-        require(newSalary > 0);
-        newSalary = newSalary * 1 ether;
-        require(newSalary != salary);
-
-        doUpdateEmployee(employee, newSalary);
-    }
-
-    function getEmployee() view public returns (address) {
-        return employee;
-    }
-
-    function addFund() payable public returns (uint) {
-        return address(this).balance;
-    }
-
-    function calculateRunway() view public returns (uint) {
-        return address(this).balance / salary;
-    }
-
-    function getSalary() view public returns (uint) {
+    
+    function getSalary() public returns(uint){
         return salary;
     }
-
-    function hasEnoughFund() view public returns (bool) {
+    
+    function updateEmployeeSalary(uint value)public {
+        require(value>0);
+        salary = value * 1 ether;
+    }
+    
+    function getAddress() public returns(address){
+        return curAddr;
+    }
+    
+    function updateEmployeeAddress(address newAddr) public{
+        require(msg.sender == owner);
+        require( newAddr != curAddr );
+        require( newAddr != 0x0 );
+        uint t = now - lastPayday;
+        uint money = t / payDuration *salary;
+        if ( !hasEnoughBalance2(money) && curAddr !=0x0 ) curAddr.transfer(money);
+        lastPayday=now;
+        curAddr = newAddr;
+    }
+    
+    function addFund() payable public returns(uint){
+        return address(this).balance;
+    }
+    
+    function calculateRunway() view public returns(uint){
+        return address(this).balance / salary;
+    }
+    
+    function hasEnoughFund() public returns(bool){
         return calculateRunway() > 0;
     }
-
-    function isMe() view public returns (bool) {
-        return msg.sender == employee;
+    
+    function hasEnoughBalance2(uint value) internal returns(bool){
+        return address(this).balance >= value;
     }
-
-    function getPaid() public {
-        require(msg.sender == employee);
-
-        uint nextPayday = lastPayday + payDuration;
-        assert(nextPayday < now);
-
-        lastPayday = nextPayday;
-        employee.transfer(salary);
+    
+    function getPaid() payable public {
+        require( msg.sender == curAddr );
+        require( curAddr != 0x0);
+        require( hasEnoughFund() ) ;
+        uint newDay = lastPayday + payDuration;
+        assert(newDay<now);
+        lastPayday = newDay;
+        curAddr.transfer(salary);
     }
 }
