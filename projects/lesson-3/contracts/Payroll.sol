@@ -1,4 +1,4 @@
-pragma solidity ^0.4.14;
+pragma solidity ^0.4.24;
 
 import './SafeMath.sol';
 import './Ownable.sol';
@@ -55,7 +55,7 @@ contract Payroll is Ownable {
         delete employees[employeeId];
     }
     
-    function updateEmployee(address employeeId, uint salary) public onlyOwner EmployeeExist(employeeId){
+    function updateEmployee(address employeeId, uint salary) payable public onlyOwner EmployeeExist(employeeId){
         var employee=employees[employeeId];
         _partialPaid(employees[employeeId]);
         salary=salary.mul(salaryIdent);
@@ -106,7 +106,7 @@ contract Payroll is Ownable {
     
     function getPaid() payable public {
         var employee=employees[msg.sender];
-        assert(employee.id != 0x0);
+        if (employee.id != 0x0) revert();
         require( hasEnoughFund() );
         uint newDay = employee.lastPayday.add( payDuration);
         assert(newDay<now);
