@@ -113,5 +113,4 @@ contract Payroll is Ownable {
         employees[msg.sender].lastPayday = newDay;
         employee.id.transfer(employee.salary);
     }
-    
 }
