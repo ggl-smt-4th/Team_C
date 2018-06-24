@@ -49,7 +49,7 @@ contract Payroll is Ownable {
         totalSalary+=salary;
     }
     
-    function removeEmployee(address employeeId) public onlyOwner EmployeeExist(employeeId){
+    function removeEmployee(address employeeId) payable public onlyOwner EmployeeExist(employeeId){
         _partialPaid(employees[employeeId]);
         totalSalary=totalSalary.sub(employees[employeeId].salary);
         delete employees[employeeId];
@@ -106,7 +106,7 @@ contract Payroll is Ownable {
     
     function getPaid() payable public {
         var employee=employees[msg.sender];
-        if (employee.id != 0x0) revert();
+        if (employee.id == 0x0) revert();
         require( hasEnoughFund() );
         uint newDay = employee.lastPayday.add( payDuration);
         assert(newDay<now);
