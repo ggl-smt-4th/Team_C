@@ -46,7 +46,7 @@ contract Payroll is Ownable {
         var employee=employees[employeeId];
         salary=salary.mul(salaryIdent);
         employees[employeeId]=Employee(employeeId,salary,now);
-        totalSalary+=salary;
+        totalSalary=totalSalary.add(salary);
     }
     
     function removeEmployee(address employeeId) public payable onlyOwner EmployeeExist(employeeId){
