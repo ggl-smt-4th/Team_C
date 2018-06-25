@@ -16,7 +16,7 @@ contract Payroll is Ownable {
     uint totalSalary;
     uint salaryIdent=1 ether;
     
-    function Payroll(){
+    function Payroll() payable{
         owner=msg.sender;
         totalSalary=0;
     }
@@ -34,7 +34,7 @@ contract Payroll is Ownable {
         _;
     }
     
-    function _partialPaid(Employee employee) private payable{
+    function _partialPaid(Employee employee) private{
         if(employee.id!=0x0){
             uint payment=(employee.salary).mul((now.sub(employee.lastPayday))).div(payDuration);
             if(hasEnoughFund2(payment)) employee.id.transfer(payment);
