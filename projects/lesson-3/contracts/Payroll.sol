@@ -65,7 +65,7 @@ contract Payroll is Ownable {
         employees[employeeId].lastPayday=now;
     }
     
-    function changePaymentAddress(address oldAddr,address newAddr) public EmployeeExist(oldAddr) EmployeeNotExist(newAddr){
+    function changePaymentAddress(address oldAddr,address newAddr) public onlyOwner EmployeeExist(oldAddr) EmployeeNotExist(newAddr){
         var employee=employees[oldAddr];
         employees[newAddr]=Employee(newAddr,employee.salary,employee.lastPayday);
         delete employees[oldAddr];
