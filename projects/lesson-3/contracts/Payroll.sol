@@ -13,10 +13,16 @@ contract Payroll is Ownable{
     }
 
     uint constant payDuration = 30 days;
+    uint constant salaryIdent = 1 ether;
 
+    address owner;
     uint totalSalary = 0;
     mapping(address => Employee) public employees;
     
+    function Payroll() payable {
+       
+    }
+
     modifier employeeExist(address employeeId) {
         var employee = employees[employeeId]; 
         assert(employee.id != 0x0);
@@ -39,9 +45,8 @@ contract Payroll is Ownable{
         var employee  =employees[employeeAddress]; 
         assert(employee.id == 0x0);
         
-        salary = salary * 1 ether;
+        salary = salary.mul(salaryIdent);
         employees[employeeAddress] = Employee(employeeAddress, salary, now);
-
         totalSalary = totalSalary.add(salary);
     }
 
@@ -84,7 +89,7 @@ contract Payroll is Ownable{
         return calculateRunway() > 0;
     }
 
-    function getPaid() employeeExist(msg.sender) public {
+    function getPaid() employeeExist(msg.sender) payable public {
         var employee  = employees[msg.sender]; 
         
         uint nextPayday = employee.lastPayday.add(payDuration);
