@@ -32,3 +32,37 @@
           = [Z, K1, K2, A, B] + merge([O],[C, O])
           = [Z, K1, K2, A, B, C] + merge([O],[O])
           = [Z, K1, K2, A, B, C, O]
+
+
+## 各函数调用截图
+
+addFund
+![](https://github.com/joewang2018/Team_C/raw/master/projects/lesson-3/pics/addFund.png)
+
+addEmployee
+![](https://github.com/joewang2018/Team_C/raw/master/projects/lesson-3/pics/addEmployee.png)
+
+changePaymentAddress
+![](https://github.com/joewang2018/Team_C/raw/master/projects/lesson-3/pics/changePaymentAddress.png)
+
+updateEmployee
+![](https://github.com/joewang2018/Team_C/raw/master/projects/lesson-3/pics/updateEmployee.png)
+
+calculateRunway
+![](https://github.com/joewang2018/Team_C/raw/master/projects/lesson-3/pics/calculateRunway.png)
+
+hasEnoughFund
+![](https://github.com/joewang2018/Team_C/raw/master/projects/lesson-3/pics/hasEnoughFund.png)
+
+getPaid
+![](https://github.com/joewang2018/Team_C/raw/master/projects/lesson-3/pics/getPaid.png)
+
+removeEmployee
+![](https://github.com/joewang2018/Team_C/raw/master/projects/lesson-3/pics/removeEmployee.png)
+
+transferOwnership
+![](https://github.com/joewang2018/Team_C/raw/master/projects/lesson-3/pics/transferOwnership.png)
+
+renounceOwnership
+![](https://github.com/joewang2018/Team_C/raw/master/projects/lesson-3/pics/renounceOwnership.png)
+
