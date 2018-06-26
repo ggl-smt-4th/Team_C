@@ -1,4 +1,4 @@
-## contract Z的继承线计算：
+## contract Z的继承线计算
 
     ```
     contract O
@@ -13,13 +13,13 @@
 
     L(K1) = [K1] + merge(L[A], L[B], [A, B])
           = [K1] + merge([A, O], [B, O], [A, B])
-          = [K1, A] + merge([O], [B, 0], [B])
+          = [K1, A] + merge([O], [B, O], [B])
           = [K1, A, B] + merge([O], [O])
           = [K1, A, B, O]
       
     L(K2) = [K2] + merge(L[A], L[C], [A, C])
           = [K2] + merge([A, O], [C, O], [A, C])
-          = [K2, A] + merge([O], [C, 0], [C])
+          = [K2, A] + merge([O], [C, O], [C])
           = [K2, A, C] + merge([O], [O])
           = [K2, A, C, O]
 最终Z的继承线计算如下：
