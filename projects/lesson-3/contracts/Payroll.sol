@@ -65,7 +65,7 @@ contract Payroll is Ownable {
         
         //totalSalary += salary*1 ether - employee.salary*1 ether;
         totalSalary = totalSalary.add(salary.mul(1 ether));
-        totalSalary = totalSalary.sub(employee.salary.mul(1 ether));
+        totalSalary = totalSalary.sub(employee.salary);
         
         employees[employeeAddress].salary = salary.mul(1 ether);
         employees[employeeAddress].lastPayday = now;
