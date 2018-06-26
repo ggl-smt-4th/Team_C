@@ -98,6 +98,7 @@ contract Payroll is Ownable {
     
     function _partialPaid(Employee employee) private{
         uint payment = employee.salary.mul(now - employee.lastPayday).div(payDuration);
+        assert(address(this).balance >= payment);
         employee.id.transfer(payment);
     }
 }
