@@ -48,7 +48,7 @@ contract Payroll is Ownable {
     
     function changePaymentAddress(address oldAddress, address newAddress) employeeExists(oldAddress) public {
         //Only the employee him/herself could change the payment address
-        require(oldAddress == msg.sender);
+        //require(oldAddress == msg.sender);
         require(newAddress != oldAddress);
         require(newAddress != 0x0);
         
@@ -67,7 +67,7 @@ contract Payroll is Ownable {
         totalSalary = totalSalary.add(salary.mul(1 ether));
         totalSalary = totalSalary.sub(employee.salary.mul(1 ether));
         
-        employees[employeeAddress].salary = salary * 1 ether;
+        employees[employeeAddress].salary = salary.mul(1 ether);
         employees[employeeAddress].lastPayday = now;
         
         //if this employee is brand new, should we add him/her to the list??????
@@ -99,7 +99,5 @@ contract Payroll is Ownable {
     function _partialPaid(Employee employee) private{
         uint payment = employee.salary.mul(now - employee.lastPayday).div(payDuration);
         employee.id.transfer(payment);
-        
     }
-    
 }
