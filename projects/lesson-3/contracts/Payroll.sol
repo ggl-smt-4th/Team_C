@@ -30,7 +30,7 @@ contract Payroll is Ownable {
     //    _;
     //}
     
-    constructor() payable public {
+    function Payroll() payable public {
         owner = msg.sender;
     }
     
