@@ -4,8 +4,7 @@ import './SafeMath.sol';
 import './Ownable.sol';
 
 contract Payroll is Ownable {
-    
-	using SafeMath for uint;
+    using SafeMath for uint;
     
     struct Employee {
          // TODO, your code here
@@ -16,25 +15,23 @@ contract Payroll is Ownable {
     
     uint constant payDuration = 30 days;
     uint public totalSalary = 0;
-	mapping(address => Employee) public employees;
-
-	modifier employeeExist(address employeeId) {
-	    var employee = employees[employeeId];
+    mapping(address => Employee) public employees;
+    
+    function Payroll() payable public {
+        // TODO: your code here
+    }
+    
+    modifier employeeExist(address employeeId) {
+        var employee = employees[employeeId];
         assert(employee.id != 0x0);
-		_;
-	}
-	
-	modifier employeeNotExist(address employeeId) {
-		var employee = employees[employeeId];
-        assert(employee.id == 0x0);
-		_;
+        _;
 	}
 	
     function _partialPaid(Employee employee) private {
         uint payment = employee.salary.mul(now.sub(employee.lastPayday)).div(payDuration);
         employee.id.transfer(payment);
     }
-        
+
     function addEmployee(address employeeId, uint salary) public onlyOwner {
         // TODO: your code here
         var employee = employees[employeeId];
@@ -45,8 +42,8 @@ contract Payroll is Ownable {
     }
     
     function removeEmployee(address employeeId) public onlyOwner employeeExist(employeeId){ 
-		// TODO: your code here
-		var employee = employees[employeeId];
+        // TODO: your code here
+        var employee = employees[employeeId];
 		
         _partialPaid(employee);
         totalSalary = totalSalary.sub(employees[employeeId].salary);
@@ -99,7 +96,7 @@ contract Payroll is Ownable {
     
     function getPaid() public employeeExist(msg.sender) {
         // TODO: your code here
-	    var employee = employees[msg.sender];
+        var employee = employees[msg.sender];
 	
         uint nextPayday = employee.lastPayday.add(payDuration);
         assert(nextPayday < now);
