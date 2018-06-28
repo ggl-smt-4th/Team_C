@@ -1,0 +1,85 @@
+pragma solidity ^0.4.14;
+
+import './Ownable.sol';
+
+contract Payroll is Ownable{
+
+    struct Employee {
+        address id;
+        uint salary;
+        uint lastPayday;
+    }
+
+    uint constant payDuration = 30 days;
+
+    address owner;
+    // Employee[] employees;
+    mapping(address => Employee) public employees;
+    uint totalSalary;
+    
+    modifier employeeExist (address employeeId) {
+        var employee = employees[employeeId];
+        assert(employee.id != 0x0);
+        _;
+    }
+    
+    function _partialPaid(Employee employee) private{
+        uint payment = employee.salary * (now - employee.lastPayday) / payDuration;
+        employee.id.transfer(payment);
+    }
+
+    function addEmployee(address employeeAddress, uint salary) onlyOwner {
+        var employee = employees[employeeAddress];
+        assert(employee.id == 0x0);
+        salary *= 1 ether;  // convert the uint to ether
+        employees[employeeAddress] = (Employee(employeeAddress, salary, now));
+        totalSalary += salary;
+    }
+
+    function removeEmployee(address employeeId) onlyOwner employeeExist(employeeId) {
+        var employee = employees[employeeId];
+        _partialPaid(employee);
+        totalSalary -= employee.salary;
+        delete employees[employeeId];
+    }
+
+    function updateEmployee(address employeeAddress, uint salary) onlyOwner employeeExist(employeeAddress) {
+        var employee = employees[employeeAddress];
+        _partialPaid(employee);
+        employee.id = employeeAddress;
+        salary *= 1 ether;
+        totalSalary = totalSalary - employee.salary + salary;
+        employee.salary = salary;
+        
+    }
+
+    function addFund() payable public returns (uint) {
+        return address(this).balance;
+    }
+
+    function calculateRunway() public view returns (uint) {
+        return this.balance / totalSalary;
+    }
+
+    function hasEnoughFund() public view returns (bool) {
+        return calculateRunway() > 0;
+    }
+    
+    function checkEmployee(address employeeId) returns (uint salary, uint lastPayday) {
+        var employee = employees[employeeId];
+        // return (employee.salary, employee.lastPayday);
+        salary = employee.salary;
+        lastPayday = employee.lastPayday;
+    }
+
+    function getPaid() public employeeExist(msg.sender){
+        var employee = employees[msg.sender];
+        
+        uint nextPayday = employee.lastPayday + payDuration;
+        assert(nextPayday < now);
+        
+        employee.lastPayday = nextPayday;
+        employee.id.transfer(employee.salary);
+    }
+}
+
