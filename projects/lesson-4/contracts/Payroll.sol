@@ -24,7 +24,12 @@ contract Payroll is Ownable {
         _;
     }
     
-    modifier employeeNotExists(address employeeAddress) {
+    ////This modifier makes sure the user can only change his/her own information
+    //modifier onlyDIY(address employeeAddress) {
+    //    assert(employeeAddress == msg.sender);
+    //    _;
+    //}
+    modifier employeeNotExist(address employeeAddress){
         Employee storage employee = employees[employeeAddress];
         assert(employee.id == 0x0);
         _;
@@ -34,12 +39,12 @@ contract Payroll is Ownable {
         owner = msg.sender;
     }
     
-    function addEmployee(address employeeAddress, uint salary) onlyOwner employeeNotExists(employeeAddress) public {
+    function addEmployee(address employeeAddress, uint salary) onlyOwner employeeNotExist(employeeAddress) public {
         employees[employeeAddress] = Employee(employeeAddress, salary.mul(1 ether), now);
         totalSalary = totalSalary.add(salary.mul(1 ether));
     }
     
-    function removeEmployee(address employeeAddress) onlyOwner employeeExists(employeeAddress) public {
+    function removeEmployee(address employeeAddress) onlyOwner public {
         Employee storage  employee = employees[employeeAddress];
         _partialPaid(employee);
         totalSalary -= employee.salary * 1 ether;
@@ -86,7 +91,8 @@ contract Payroll is Ownable {
         return calculateRunway() > 0;
     }
 
-    function getPaid() employeeExists(msg.sender) public {
+    function getPaid() payable employeeExists(msg.sender) public {
+        require(hasEnoughFund());
         Employee storage employee = employees[msg.sender];
         
         uint nextPayday = employee.lastPayday.add(payDuration);
