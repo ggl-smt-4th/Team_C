@@ -121,12 +121,12 @@ class EmployeeList extends Component {
       from: account,
     }).then(() => {
       this.setState({
-        employees: employees.map((employee) => {
-          if (employee.address === address) {
-            employee.salary = salary;
+        employees: employees.map((employees) => {
+          if (employees.address === address) {
+            employees.salary = salary;
           }
 
-          return employee;
+          return employees;
         })
       });
     }).catch(() => {
@@ -141,7 +141,7 @@ class EmployeeList extends Component {
       from: account,
     }).then((result) => {
       this.setState({
-        employees: employees.filter(employees => employee.address !== employeeId),
+        employees: employees.filter(employees => employees.address !== employeeId),
       });
     }).catch(() => {
       message.error('你没有足够的金额');
