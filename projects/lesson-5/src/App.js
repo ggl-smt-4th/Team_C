@@ -19,7 +19,9 @@ class App extends Component {
     this.state = {
       storageValue: 0,
       web3: null,
-      mode: 'employer'
+      mode: 'employer',
+      payroll:null,
+      account:null
     }
   }
 

@@ -9,9 +9,7 @@ let getWeb3 = new Promise(function(resolve, reject) {
     // Checking if Web3 has been injected by the browser (Mist/MetaMask)
     if (typeof web3 !== 'undefined') {
       // Use Mist/MetaMask's provider.
-      // web3 = new Web3(web3.currentProvider)
-      var provider = new Web3.providers.HttpProvider('http://localhost:8545')
-      web3 = new Web3(provider);
+      web3 = new Web3(web3.currentProvider)
       results = {
         web3: web3
       }
@@ -21,10 +19,9 @@ let getWeb3 = new Promise(function(resolve, reject) {
       resolve(results)
     } else {
       // Fallback to localhost if no web3 injection.
-      var provider = new Web3.providers.HttpProvider('http://localhost:8545')
-
+      var provider = new Web3.providers.HttpProvider('http://host:8545')
       web3 = new Web3(provider)
-
+      if(web3.conn)
       results = {
         web3: web3
       }
