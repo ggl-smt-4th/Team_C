@@ -35,6 +35,17 @@ contract('Payroll', function(accounts) {
     });
   });
 
+  it("Test call addEmployee() with the same address", function() {
+     var payroll;
+     return Payroll.new().then(instance => {
+        payroll = instance;
+        payroll.addEmployee(employee, salary, {from: owner});
+        return payroll.addEmployee(employee, salary, {from: owner});
+     }).then(assert.fail).catch(error => {
+        assert.include(error.toString(), "Error: VM Exception", "Same employee can not be accepted");
+     });
+  });
+
   it("Test call addEmployee() with negative salary", function() {
     var payroll;
     return Payroll.new().then(instance => {

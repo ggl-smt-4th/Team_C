@@ -14,7 +14,7 @@ const { Header, Content, Footer } = Layout;
 
 class App extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       storageValue: 0,
@@ -59,7 +59,7 @@ class App extends Component {
     // Get accounts.
     this.state.web3.eth.getAccounts((error, accounts) => {
       this.setState({
-        account: accounts[0],
+        account: accounts[2],
       });
       Payroll.deployed().then((instance) => {
         PayrollInstance = instance
