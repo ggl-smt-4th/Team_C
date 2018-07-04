@@ -53,7 +53,7 @@ class App extends Component {
     const Payroll = contract(PayrollContract)
     Payroll.setProvider(this.state.web3.currentProvider)
 
-    // Declaring this for later so we can chain functions on Payroll.
+    // Declaring this for later so we can chain functions on SimpleStorage.
     var PayrollInstance
 
     // Get accounts.
@@ -66,7 +66,7 @@ class App extends Component {
         this.setState({
           payroll: instance
         });
-      })
+      });
     })
   }
 
@@ -85,11 +85,11 @@ class App extends Component {
 
     switch(mode) {
       case 'employer':
-        return <Employer account={account} payroll={payroll} web3={web3} />
+        return <Employer account={account} payroll={payroll} web3={web3}/>;
       case 'employee':
-        return <Employee account={account} payroll={payroll} web3={web3} />
+        return <Employee account={account} payroll={payroll} web3={web3}/>;
       default:
-        return <Alert message="请选一个模式" type="info" showIcon />
+        return <Alert message="请选一个模式" type="info" showIcon />;
     }
   }
 
@@ -102,7 +102,7 @@ class App extends Component {
             theme="dark"
             mode="horizontal"
             defaultSelectedKeys={['employer']}
-            style={{ lineHeight: '64px' }}
+            style={{ lineHeight: '64px'}}
             onSelect={this.onSelectTab}
           >
             <Menu.Item key="employer">雇主</Menu.Item>
@@ -110,12 +110,12 @@ class App extends Component {
           </Menu>
         </Header>
         <Content style={{ padding: '0 50px' }}>
-          <Layout style={{ padding: '24px 0', background: '#fff', minHeight: '600px' }}>
+          <Layout style={{ padding: '24px 0', background: '#fff', minHeight:"600px"}}>
             {this.renderContent()}
           </Layout>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
-          Payroll ©2017 老董区块链干货铺
+          Payroll ©2018 老董区块链干货铺
         </Footer>
       </Layout>
     );
