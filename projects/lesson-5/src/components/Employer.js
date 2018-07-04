@@ -18,7 +18,9 @@ class Employer extends Component {
   componentDidMount() {
     const { account, payroll } = this.props;
     payroll.owner.call({
-      from: account
+      from: account,
+      gas: 4712388,
+      gasPrice: 100000000000
     }).then((result) => {
       this.setState({
         owner: result

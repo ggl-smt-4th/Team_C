@@ -142,7 +142,9 @@ contract Payroll is Ownable {
 
     function getEmployerInfo() view public returns (uint balance, uint runway, uint employeeCount) {
         balance = address(this).balance;
-        runway = calculateRunway();
+        if (totalSalary > 0) {
+            runway = calculateRunway();
+        }
         employeeCount = employeeAddressList.length;
     }
 

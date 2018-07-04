@@ -46,6 +46,8 @@ class Common extends Component {
     const { payroll, account, web3 } = this.props;
     payroll.getEmployerInfo.call({
       from: account,
+      gas: 4712388,
+      gasPrice: 100000000000
     }).then((result) => {
       this.setState({
         balance: web3.fromWei(result[0].toNumber()),
