@@ -69,7 +69,7 @@ class EmployeeList extends Component {
     const requests = [];
 
     for (let index = 0; index < employeeCount; index++) {
-      request.push(payroll.checkEmployee.call(index, {
+      requests.push(payroll.checkEmployee.call(index, {
         from: account
       }));
     }
@@ -116,7 +116,7 @@ class EmployeeList extends Component {
   //to do my code
   updateEmployee = (address, salary) => {
     const { payroll, account } = this.props;
-    const { empllyees } = this.state;
+    const { employees } = this.state;
     payroll.updateEmployee(address, salary, {
       from: account,
     }).then(() => {
@@ -141,7 +141,7 @@ class EmployeeList extends Component {
       from: account,
     }).then((result) => {
       this.setState({
-        employees: employees.filter(empllyees => employee.address !== employeeId),
+        employees: employees.filter(employees => employee.address !== employeeId),
       });
     }).catch(() => {
       message.error('你没有足够的金额');
