@@ -16,10 +16,23 @@ class Common extends Component {
       }
     }
 
+    //事件訂閱，updateInfo為回調函數（errorあり，resultなし）
+    this.addFund = payroll.AddFund(updateInfo);
+    this.getPaid = payroll.GetPaid(updateInfo);
+    this.addEmployee = payroll.AddEmployee(updateInfo);
+    this.updateEmployee = payroll.UpdateEmployee(updateInfo);
+    this.removeEmployee = payroll.RemoveEmployee(updateInfo);
+
     this.getEmployerInfo();
   }
 
   componentWillUnmount() {
+    //取消事件訂閱
+    this.addFund.stopWatching();
+    this.getPaid.stopWatching();
+    this.addEmployee.stopWatching();
+    this.updateEmployee.stopWatching();
+    this.removeEmployee.stopWatching();
   }
 
   getEmployerInfo = () => {
