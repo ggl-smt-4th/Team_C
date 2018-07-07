@@ -3,11 +3,9 @@ let Payroll = artifacts.require("./Payroll.sol");
 contract('Payroll', (accounts) => {
   const owner = accounts[0];
   const employee = accounts[1];
+  const emptyAddress = '0x0000000000000000000000000000000000000000';
   const guest = accounts[2];
   const salary = 1;
-
-  const runway = 20;
-  const fund = runway * salary;
 
   let payroll;
 
@@ -27,21 +25,13 @@ contract('Payroll', (accounts) => {
     });
   });
 
-  it("Test call removeEmployee() with calculateRunway", function() {
-    return Payroll.new.call(owner, {
-      from: owner,
-      value: web3.toWei(fund, 'ether')
-    }).then(instance => {
-      payroll = instance;
-      return payroll.addEmployee(employee, salary, {
-        from: owner
+  it("Test call removeEmployee() with empty address", () => {
+      return payroll.removeEmployee(emptyAddress, {from: owner}).then(() => {
+          assert(false, "Should not be successful");
+      }).catch(error => {
+          assert.include(error.toString(), "Error: VM Exception", "Empty address can not be accepted");
       });
-    }).then(() => {
-      return payroll.calculateRunway();
-    }).then(runwayRet => {
-      assert.equal(runwayRet.toNumber(), runway, "Runway is wrong");
-    });
-  });
+   });
 
   it("Test call removeEmployee() by guest", () => {
     return payroll.removeEmployee(employee, {
