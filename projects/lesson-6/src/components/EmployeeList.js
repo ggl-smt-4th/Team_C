@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {Table, Button, Modal, Form, InputNumber, Input, message, Popconfirm} from 'antd';
+import React, { Component } from 'react'
+import { Table, Form, InputNumber, Button, Modal, Input, message, Popconfirm } from 'antd';
 
 import EditableCell from './EditableCell';
 
@@ -62,14 +62,20 @@ class EmployeeList extends Component {
             }
             this.loadEmployees(employeeCount);
         });
+
+        //this.newEmployeeEvent = payroll.NewEmployee(updateInfo);
+        //this.updateEmployeeEvent = payroll.UpdateEmployee(updateInfo);
+        //this.removeEmployeeEvent = payroll.RemoveEmployee(updateInfo);
+        //this.loadEmployees(employeeCount).catch(error => {alert(error);});
     }
 
     loadEmployees(employeeCount) {
         const {payroll, account, web3} = this.props;
         const requests = [];
         for (let index = 0; index < employeeCount; index++) {
-            requests.push(payroll.getEmployeeInfo.call(index, {from: account}))
+            requests.push(payroll.getEmployeeInfo.call(index, { from: account }));
         }
+
         Promise.all(requests)
             .then(values => {
                 const employees = values.map(value => ({
@@ -104,6 +110,16 @@ class EmployeeList extends Component {
                 showModal: false,
                 employees: employees.concat([newEmployee]),
             });
+        }).catch(error => {
+            console.log(error);
+            console.log(typeof account);
+            console.log(account);
+            console.log(typeof address);
+            console.log(address);
+            console.log(typeof salary);
+            console.log(salary);
+            console.log(typeof employees);
+            console.log(employees);
         });
     }
 
@@ -125,6 +141,12 @@ class EmployeeList extends Component {
             });
         }).catch((error) => {
             message.error(error.message);
+            console.log(typeof account);
+            console.log(account);
+            console.log(typeof address);
+            console.log(address);
+            console.log(typeof salary);
+            console.log(salary);
         });
     }
 
@@ -141,8 +163,12 @@ class EmployeeList extends Component {
                 showModal: false,
                 employees: employees.filter((employee) => employee.address !== employeeId)
             });
-        }).catch((error) => {
-            message.error(error.message);
+        }).catch(error => {
+            alert(error);
+            console.log(typeof account);
+            console.log(account);
+            console.log(typeof employeeId);
+            console.log(employeeId);
         });
     }
 
