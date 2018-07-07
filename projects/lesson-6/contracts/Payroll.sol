@@ -6,10 +6,7 @@ import './Ownable.sol';
 contract Payroll is Ownable {
 
     using SafeMath for uint;
-
-    /**
-     * We are using mapping here, the key is already the address.
-     */
+    
     struct Employee {
         uint index;
         uint salary;
@@ -35,11 +32,30 @@ contract Payroll is Ownable {
     uint public totalSalary = 0;
     address[] employeeAddressList;
 
-    /**
-     * This contract is simple, We update employees by the key directly
-     * instead of updating a copy so that we could save some gas.
+     /**
+     * We are using mapping here, the key is already the address.
      */
     mapping(address => Employee) public employees;
+
+    event NewEmployee(
+        address employee
+    );
+
+    event UpdateEmployee(
+        address employee
+    );
+
+    event RemoveEmployee(
+        address employee
+    );
+
+    event NewFund(
+        address employee
+    );
+
+    event GetPaid(
+        address employee
+    );
 
     function Payroll() payable public Ownable {
         owner = msg.sender;
@@ -60,6 +76,7 @@ contract Payroll is Ownable {
         employees[employeeId] = Employee(index, salary, now);
 
         totalSalary = totalSalary.add(salary);
+        emit NewEmployee(employeeId);
     }
 
     function removeEmployee(address employeeId) public onlyOwner shouldExist(employeeId) {
@@ -80,6 +97,7 @@ contract Payroll is Ownable {
 
         // adjust length
         employeeAddressList.length -= 1;
+        emit RemoveEmployee(employeeId);
     }
 
     function changePaymentAddress(address oldAddress, address newAddress) public onlyOwner shouldExist(oldAddress) shouldNotExist(newAddress) {
@@ -98,9 +116,12 @@ contract Payroll is Ownable {
         employees[employeeId].salary = salary;
         employees[employeeId].lastPayday = now;
         totalSalary = totalSalary.add(salary).sub(oldSalary);
+
+        emit UpdateEmployee(employeeId);
     }
 
     function addFund() payable public returns (uint) {
+        emit NewFund(msg.sender);
         return address(this).balance;
     }
 
@@ -123,6 +144,7 @@ contract Payroll is Ownable {
 
         employees[employeeId].lastPayday = nextPayday;
         employeeId.transfer(employees[employeeId].salary);
+        emit GetPaid(employeeId);
     }
 
     function getEmployerInfo() view public returns (uint balance, uint runway, uint employeeCount) {
