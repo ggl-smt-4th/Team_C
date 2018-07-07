@@ -31,6 +31,8 @@ contract('Payroll', function (accounts) {
         });
     });
 
+
+
     it("Test call getPaid() before duration", function () {
         var payroll;
         return Payroll.new.call(owner, {from: owner, value: web3.toWei(fund, 'ether')}).then(instance => {
