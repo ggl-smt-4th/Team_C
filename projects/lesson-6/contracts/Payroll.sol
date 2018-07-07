@@ -163,7 +163,7 @@ contract Payroll is Ownable {
 
     function getEmployeeInfoById(address id) view public returns (uint salary, uint lastPayday, uint balance) {
         salary = employees[id].salary;
-        lastPayday = employees[id].lastPayday;
+        lastPayday = employees[id].lastPayday; 
         balance = address(id).balance;
     }
 }
