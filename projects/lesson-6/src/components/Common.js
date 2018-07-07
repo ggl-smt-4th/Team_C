@@ -7,11 +7,6 @@ class Common extends Component {
         this.state = {};
     }
 
-    //componentDidMount() {
-    //    //const { payroll, web3 } = this.props;
-    //    this.checkInfo();
-    //}
-
     componentDidMount() {
         const { payroll, web3 } = this.props;
         const updateInfo = (error, result) => {
