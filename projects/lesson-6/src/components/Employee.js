@@ -3,7 +3,7 @@ import {Card, Col, Row, Layout, Alert, message, Button} from 'antd';
 
 import Common from './Common';
 
-class Employer extends Component {
+class Employee extends Component {
     checkEmployee = () => {
         const {payroll, account, web3} = this.props;
         payroll.getEmployeeInfoById.call(account, {
@@ -90,4 +90,4 @@ class Employer extends Component {
     }
 }
 
-export default Employer
+export default Employee
