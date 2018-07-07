@@ -1,55 +1,74 @@
-import React, {Component} from 'react'
-import {Card, Col, Row, Layout, Alert, message, Button} from 'antd';
+import React, { Component } from 'react'
+import { Card, Col, Row, Layout, Alert, message, Button } from 'antd';
 
 import Common from './Common';
 
-class Employer extends Component {
-    checkEmployee = () => {
-        const {payroll, account, web3} = this.props;
-        payroll.getEmployeeInfoById.call(account, {
-            from: account
-        }).then((ret) => {
-            const info = {
-                salary: web3.fromWei(ret[0].toNumber()),
-                lastPaidDate: new Date(ret[1].toNumber() * 1000).toString(),
-                balance: web3.fromWei(ret[2].toNumber()),
-            }
-            this.setState(info);
-        }).catch((error) => {
-            console.log(error);
-            message.error(error.message);
-        });
-    }
-
-    getPaid = () => {
-        const {payroll, account} = this.props;
-        payroll.getPaid({
-            from: account,
-        }).then((ret) => {
-            this.checkEmployee();
-        }).catch((error) => {
-            message.error(error.message);
-        });
-    }
-
+class Employee extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            salary: 0,
-            lastPaidDate: '',
-            balance: false,
-        };
+        this.state = {};
     }
 
     componentDidMount() {
+        const { payroll } = this.props;
+        const updateInfo = (error, result) => {
+            if (!error){
+                this.checkEmployee();
+            }
+        }
+        this.getPaidEvent = payroll.GetPaid(updateInfo);
         this.checkEmployee();
     }
 
+    componentWillUnmount() {
+        this.getPaidEvent.stopWatching();
+    }
+
+    checkEmployee = () => {
+        const { payroll, account, web3 } = this.props;
+        payroll.getEmployeeInfoById.call(account, {
+            from: account,
+            gas: 1000000
+        }).then((result) => {
+            //console.log(result)
+            this.setState({
+                salary: web3.fromWei(result[0].toNumber()),
+                lastPaidDate: new Date(result[1].toNumber() * 1000).toString(),
+                balance: web3.fromWei(result[2].toNumber())
+            });
+        }).catch((error) => {
+			console.log(error);
+		});
+        //web3.eth.getBalance(account, (err, result) => {
+        //    this.setState({
+        //        balance: web3.fromWei(result[2].toNumber())
+        //    });
+        //});
+    }
+
+    getPaid = () => {
+        const { payroll, account } = this.props;
+        payroll.getPaid({
+            from: account,
+            gas: 1000000
+        }).then((result) => {
+            //alert('You have been paid');
+			this.checkEmployee();
+            message.info('You have been paid');
+        }).catch((error) => {
+			alert(error);
+		});
+    }
+
     renderContent() {
-        const {salary, lastPaidDate, balance} = this.state;
+        const { salary, lastPaidDate, balance } = this.state;
+        console.log('In renderContent');
+        console.log(salary);
+        console.log(lastPaidDate);
+        console.log(balance);
 
         if (!salary || salary === '0') {
-            return <Alert message="你不是员工" type="error" showIcon/>;
+            return <Alert message="你不是员工" type="error" showIcon />;
         }
 
         return (
@@ -78,16 +97,19 @@ class Employer extends Component {
     }
 
     render() {
-        const {account, payroll, web3} = this.props;
+        const { account, payroll, web3 } = this.props;
+        console.log('In render');
+        console.log(account);
 
         return (
-            <Layout style={{padding: '0 24px', background: '#fff'}}>
-                <Common account={account} payroll={payroll} web3={web3}/>
-                <h2>个人信息</h2>
+            <Layout style={{ padding: '0 24px', background: '#fff' }}>
+                <Common account={account} payroll={payroll} web3={web3} />
+                <h2>Personal Info</h2>
                 {this.renderContent()}
             </Layout>
         );
     }
 }
 
-export default Employer
+//export default Employer
+export default Employee
