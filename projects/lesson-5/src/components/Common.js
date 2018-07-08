@@ -11,35 +11,29 @@ class Common extends Component {
   componentDidMount() {
     const { payroll, web3 } = this.props;
 
-    /**
-     * 事件相关，暂不要求
-     *
-     * const updateInfo = (error, result) => {
-     *   if (!error) {
-     *     this.checkInfo();
-     *   }
-     * }
+     const updateInfo = (error, result) => {
+        if (!error) {
+          this.getEmployerInfo();
+        }
+      }
 
-     * this.newFund = payroll.NewFund(updateInfo);
-     * this.getPaid = payroll.GetPaid(updateInfo);
-     * this.newEmployee = payroll.NewEmployee(updateInfo);
-     * this.updateEmployee = payroll.UpdateEmployee(updateInfo);
-     * this.removeEmployee = payroll.RemoveEmployee(updateInfo);
-     */
+      this.newFund = payroll.AddFund(updateInfo);
+      this.getPaid = payroll.GetPaid(updateInfo);
+      this.newEmployee = payroll.AddEmployee(updateInfo);
+      this.updateEmployee = payroll.UpdateEmployee(updateInfo);
+      this.removeEmployee = payroll.RemoveEmployee(updateInfo);
 
-    this.getEmployerInfo();
+      this.getEmployerInfo();
   }
 
   componentWillUnmount() {
-    /**
-     * 事件相关，暂不要求
-     *
-     * this.newFund.stopWatching();
-     * this.getPaid.stopWatching();
-     * this.newEmployee.stopWatching();
-     * this.updateEmployee.stopWatching();
-     * this.removeEmployee.stopWatching();
-     */
+
+     this.newFund.stopWatching();
+     this.getPaid.stopWatching();
+     this.newEmployee.stopWatching();
+     this.updateEmployee.stopWatching();
+     this.removeEmployee.stopWatching();
+
   }
 
   getEmployerInfo = () => {

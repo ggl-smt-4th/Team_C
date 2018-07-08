@@ -59,7 +59,8 @@ class App extends Component {
     // Get accounts.
     this.state.web3.eth.getAccounts((error, accounts) => {
       this.setState({
-        account: accounts[2],
+        account: accounts[0],
+        gas:1000000,
       });
       Payroll.deployed().then((instance) => {
         PayrollInstance = instance
