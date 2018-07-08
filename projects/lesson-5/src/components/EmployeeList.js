@@ -115,7 +115,7 @@ class EmployeeList extends Component {
   updateEmployee = (address, salary) => {
       const { payroll, account } = this.props;
       const { employees } = this.state;
-      payroll.addEmployee(address, salary, {
+      payroll.updateEmployee(address, salary, {
           from:account,
           gas:1000000,
       }).then(() => {
@@ -128,7 +128,7 @@ class EmployeeList extends Component {
               })
           });
       }).catch(() => {
-          message.error('你没有足够的金额');
+          alert('你没有足够的金额');
       })
   }
 
