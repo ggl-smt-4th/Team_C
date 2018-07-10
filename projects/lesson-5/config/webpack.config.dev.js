@@ -54,6 +54,8 @@ module.exports = {
     path: paths.appBuild,
     // Add /* filename */ comments to generated require()s in the output.
     pathinfo: true,
+    host:"0.0.0.0",
+    disableHostCheck:true,
     // This does not produce a real file. It's just the virtual path that is
     // served by WebpackDevServer in development. This is the JS bundle
     // containing code from all our entry points, and the Webpack runtime.
@@ -84,11 +86,13 @@ module.exports = {
     // First, run the linter.
     // It's important to do this before Babel processes the JS.
     preLoaders: [
+      /*
       {
         test: /\.(js|jsx)$/,
         loader: 'eslint',
         include: paths.appSrc,
       }
+      */
     ],
     loaders: [
       // Default loader: load all assets that are not handled

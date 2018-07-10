@@ -3,7 +3,7 @@ import { Card, Col, Row, Layout, Alert, message, Button } from 'antd';
 
 import Common from './Common';
 
-class Employer extends Component {
+class Employee extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -14,13 +14,30 @@ class Employer extends Component {
   }
 
   checkEmployee = () => {
+    const {payroll,employee} =this.props;
+    payroll.employees.call('0xa89efed3025c88704ffb994a58303be3f7e23871',{
+      from:'0xa89efed3025c88704ffb994a58303be3f7e23871',
+      gas:1000000
+    }).then(result=>{
+      this.setState({
+          salary:result[1].toNumber(),
+          lastPayDay:new Date(result[2].toNumber()*1000).toString()
+      })
+    })
   }
 
   getPaid = () => {
+    const {payroll,employee} =this.props;
+    payroll.getPaid({
+        from:'0xa89efed3025c88704ffb994a58303be3f7e23871',//employee,
+        gas:1000000
+    }).then(() =>{
+        alert("success")
+    })
   }
 
   renderContent() {
-    const { salary, lastPaidDate, balance } = this.state;
+    const { salary, lastPayDay, balance } = this.state;
 
     if (!salary || salary === '0') {
       return   <Alert message="你不是员工" type="error" showIcon />;
@@ -33,7 +50,7 @@ class Employer extends Component {
             <Card title="薪水">{salary} Ether</Card>
           </Col>
           <Col span={8}>
-            <Card title="上次支付">{lastPaidDate}</Card>
+            <Card title="上次支付">{lastPayDay}</Card>
           </Col>
           <Col span={8}>
             <Card title="帐号金额">{balance} Ether</Card>
@@ -64,4 +81,4 @@ class Employer extends Component {
   }
 }
 
-export default Employer
+export default Employee
