@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { Layout, Menu, Alert } from 'antd';
 
 import Fund from './Fund';

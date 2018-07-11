@@ -15,8 +15,8 @@ const columns = [{
   key: 'salary',
 }, {
   title: '上次支付',
-  dataIndex: 'lastPaidDay',
-  key: 'lastPaidDay',
+  dataIndex: 'lastPayDay',
+  key: 'lastPayDay',
 }, {
   title: '操作',
   dataIndex: '',
@@ -65,15 +65,87 @@ class EmployeeList extends Component {
   }
 
   loadEmployees(employeeCount) {
+      const {payroll,account,web3} = this.props;
+      const requests=[];
+      for(let i=0;i<employeeCount;i++){
+        requests.push(payroll.checkEmployee.call(i,{from:account}));
+      }
+
+      Promise.all(requests)
+          .then(values=>{
+            const employees=values.map(value=>({
+              key:value[0],
+              address:value[0],
+              salary:value[1].toNumber(),
+              lastPayDay:new Date(value[2].toNumber()*1000).toString()
+            }));
+
+            this.setState({
+                employees:employees,
+                loading:false
+            })
+          })
   }
 
   addEmployee = () => {
+    const {payroll,account}=this.props;
+    const {address,salary,employees}=this.state;
+    payroll.addEmployee(this.state.address,parseInt(this.state.salary),{
+        from:account,
+        gas:1000000
+      }).then(()=>{
+        let employee={
+          key:address,
+          address:address,
+          salary:salary,
+          lastPayDay:new Date().toString()
+        }
+        this.setState({
+            address:"",
+            salary:"",
+            employees:employees.concat(employee),
+            loading:false,
+            showModal:false
+        })
+    })
   }
 
   updateEmployee = (address, salary) => {
+      const {payroll,account}=this.props;
+      const {employees}=this.state;
+      payroll.updateEmployee(address,parseInt(salary),{
+          from:account,
+          gas:1000000
+      }).then(()=>{
+          this.setState({
+              address:"",
+              salary:"",
+              employees:employees.map(employee=>{
+                if(employee.address==address) {
+                  employee.salary=salary;
+                  employee.lastPayDay=new Date().toString()
+                }
+                return employee;
+              }),
+              loading:false
+          })
+      })
   }
 
   removeEmployee = (employeeId) => {
+      const {payroll,account}=this.props;
+      const {employees}=this.state;
+      payroll.removeEmployee(employeeId,{
+          from:account,
+          gas:1000000
+      }).then(()=>{
+          this.setState({
+              address:"",
+              salary:"",
+              employees:employees.filter(employee=>employee.address!=employeeId),
+              loading:false
+          })
+      })
   }
 
   renderModal() {
@@ -81,7 +153,7 @@ class EmployeeList extends Component {
       <Modal
           title="增加员工"
           visible={this.state.showModal}
-          onOk={this.addEmployee}
+          onOk={this.addEmployee.bind(this)}
           onCancel={() => this.setState({showModal: false})}
       >
         <Form>

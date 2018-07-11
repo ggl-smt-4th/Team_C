@@ -1,4 +1,0 @@
-+ jquery@3.3.1
-added 1 package from 1 contributor and audited 36625 packages in 14.292s
-found 14 vulnerabilities (4 low, 4 moderate, 3 high, 3 critical)
-  run `npm audit fix` to fix them, or `npm audit` for details
