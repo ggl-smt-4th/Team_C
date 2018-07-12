@@ -9,20 +9,31 @@ class Common extends Component {
   }
 
   componentDidMount() {
-    const { payroll } = this.props;
+    const { payroll, web3 } = this.props;
     const updateInfo = (error, result) => {
-      if (!error) {
-        this.getEmployerInfo();
-      }
+        if (!error){
+            this.checkInfo();
+        }
     }
 
-    this.getEmployerInfo();
-  }
+    this.newFundEvent = payroll.NewFund(updateInfo);
+    this.getPaidEvent = payroll.GetPaid(updateInfo);
+    this.newEmployeeEvent = payroll.NewEmployee(updateInfo);
+    this.updateEmployeeEvent = payroll.UpdateEmployee(updateInfo);
+    this.removeEmployeeEvent = payroll.RemoveEmployee(updateInfo);
 
-  componentWillUnmount() {
-  }
+    this.checkInfo();
+}
 
-  getEmployerInfo = () => {
+componentWillUnmount() {
+    this.newFundEvent.stopWatching();
+    this.getPaidEvent.stopWatching();
+    this.newEmployeeEvent.stopWatching();
+    this.updateEmployeeEvent.stopWatching();
+    this.removeEmployeeEvent.stopWatching();
+}
+
+  checkInfo = () => {
     const { payroll, account, web3 } = this.props;
     payroll.getEmployerInfo.call({
       from: account,
